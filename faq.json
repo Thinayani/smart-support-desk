@@ -1,0 +1,107 @@
+[
+  {
+    "id": "faq-1",
+    "category": "ACCOUNT",
+    "question": "I forgot my password or cannot log in to my account",
+    "keywords": "login log in sign in password reset locked forgot",
+    "answer": "You can reset your password from the login page by choosing \"Forgot password\" and entering your account email. We will send you a reset link that stays valid for 60 minutes. If the email does not arrive, check your spam folder."
+  },
+  {
+    "id": "faq-2",
+    "category": "ACCOUNT",
+    "question": "How do I delete my account and my data",
+    "keywords": "delete close remove account data privacy erase",
+    "answer": "To delete your account, open Account Settings and choose \"Delete account\". Your personal data is removed within 30 days. Orders already placed are kept in anonymised form for accounting purposes."
+  },
+  {
+    "id": "faq-3",
+    "category": "ORDER",
+    "question": "Where is my order and how can I track it",
+    "keywords": "track tracking status where order parcel package shipped dispatch",
+    "answer": "You can follow your order under My Orders. Once it has shipped we also email you a tracking number and a link to the carrier's tracking page."
+  },
+  {
+    "id": "faq-4",
+    "category": "ORDER",
+    "question": "Can I change or cancel my order after placing it",
+    "keywords": "change modify edit cancel order size colour color item before ship",
+    "answer": "Orders can be changed or cancelled from My Orders until they are handed to the carrier, which usually happens within 24 hours. Once an order has shipped it can no longer be changed; you can return it instead."
+  },
+  {
+    "id": "faq-5",
+    "category": "DELIVERY",
+    "question": "How long does delivery take",
+    "keywords": "delivery time days how long arrive eta express standard",
+    "answer": "Standard delivery takes 3 to 5 business days and express delivery takes 1 to 2 business days. Delivery times start when the order ships, not when it is placed."
+  },
+  {
+    "id": "faq-6",
+    "category": "DELIVERY",
+    "question": "Which countries do you deliver to",
+    "keywords": "ship to deliver to available in my country countries international abroad overseas",
+    "answer": "We currently deliver to the United States, Canada, the United Kingdom and all EU countries. We do not deliver to other countries at the moment."
+  },
+  {
+    "id": "faq-7",
+    "category": "SHIPPING",
+    "question": "How do I change my delivery address",
+    "keywords": "change update shipping delivery address wrong correct",
+    "answer": "You can change the delivery address under My Orders until the order has shipped. After it has shipped the address cannot be changed by us, and you would need to contact the carrier directly using your tracking number."
+  },
+  {
+    "id": "faq-8",
+    "category": "REFUND",
+    "question": "What is your refund and return policy",
+    "keywords": "refund return policy money back eligible days unused",
+    "answer": "You can return unused items in their original packaging within 30 days of delivery for a full refund. Return shipping is free for faulty items. Refunds are not available for items returned after 30 days."
+  },
+  {
+    "id": "faq-9",
+    "category": "REFUND",
+    "question": "When will I receive my refund",
+    "keywords": "refund when how long money back status received waiting",
+    "answer": "Refunds are issued to your original payment method within 5 to 10 business days after we receive and inspect the returned item. Your bank may need a few extra days to show it."
+  },
+  {
+    "id": "faq-10",
+    "category": "PAYMENT",
+    "question": "Which payment methods do you accept",
+    "keywords": "payment pay methods card visa mastercard paypal cash accept",
+    "answer": "We accept Visa, Mastercard, American Express and PayPal. We do not accept cash, cheques or bank transfers."
+  },
+  {
+    "id": "faq-11",
+    "category": "PAYMENT",
+    "question": "My payment was declined or failed",
+    "keywords": "payment declined failed error card rejected charge not going through",
+    "answer": "A declined payment is usually caused by a typo in the card details, an expired card or a limit set by your bank. Please check the details and try again, try another payment method, or contact your bank to approve the payment."
+  },
+  {
+    "id": "faq-12",
+    "category": "INVOICE",
+    "question": "How do I get an invoice or receipt",
+    "keywords": "invoice receipt bill vat tax download company",
+    "answer": "Invoices are emailed when your order ships. You can also download any invoice as a PDF from My Orders by choosing the order and clicking \"Invoice\"."
+  },
+  {
+    "id": "faq-13",
+    "category": "CONTACT",
+    "question": "How can I contact customer support or speak to a person",
+    "keywords": "contact support phone call email chat human agent person talk hours",
+    "answer": "You can reach our support team by email at support@example.com or through live chat, available Monday to Friday from 9:00 to 17:00. Replies by email usually arrive within one business day."
+  },
+  {
+    "id": "faq-14",
+    "category": "SUBSCRIPTION",
+    "question": "How do I subscribe to or unsubscribe from the newsletter",
+    "keywords": "newsletter subscribe unsubscribe emails marketing mailing list sign up",
+    "answer": "You can subscribe using the form in the footer of our website. To unsubscribe, click the unsubscribe link at the bottom of any newsletter email; the change takes effect immediately."
+  },
+  {
+    "id": "faq-15",
+    "category": "CANCEL",
+    "question": "Is there a fee for cancelling an order",
+    "keywords": "cancellation cancel fee charge cost penalty order",
+    "answer": "There is no fee for cancelling an order before it ships. Once an order has shipped it cannot be cancelled, but you can return it under our 30-day return policy."
+  }
+]
