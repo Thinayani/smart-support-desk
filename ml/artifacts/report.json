@@ -1,0 +1,78 @@
+{
+  "rows_raw": 26872,
+  "rows_after_dedupe": 23708,
+  "near_dup_groups": 7946,
+  "leaky_random_split": {
+    "accuracy": 0.9998139534883721,
+    "macro_f1": 0.9999050458379912
+  },
+  "grouped_split": {
+    "accuracy": 0.9998103546368291,
+    "macro_f1": 0.9998866425557703,
+    "train": 18435,
+    "test": 5273
+  },
+  "test_errors": [
+    {
+      "instruction": "would you give me information about cancelling orders?",
+      "category": "ORDER",
+      "intent": "cancel_order",
+      "pred": "ACCOUNT"
+    }
+  ],
+  "grouped_5fold_cv": {
+    "accuracy": 0.9997891007254935,
+    "macro_f1": 0.9998440276829186,
+    "errors": 5
+  },
+  "cv_errors_sample": [
+    {
+      "instruction": "would you give me information about cancelling orders?",
+      "category": "ORDER",
+      "intent": "cancel_order",
+      "pred": "ACCOUNT"
+    },
+    {
+      "instruction": "do ya accept card",
+      "category": "PAYMENT",
+      "intent": "check_payment_methods",
+      "pred": "ACCOUNT"
+    },
+    {
+      "instruction": "where can I notify of problems with payent?",
+      "category": "PAYMENT",
+      "intent": "payment_issue",
+      "pred": "ACCOUNT"
+    },
+    {
+      "instruction": "need help to place an oredr",
+      "category": "ORDER",
+      "intent": "place_order",
+      "pred": "ACCOUNT"
+    },
+    {
+      "instruction": "i have to see the damn ETA of my delivery helpme",
+      "category": "ORDER",
+      "intent": "track_order",
+      "pred": "DELIVERY"
+    }
+  ],
+  "messy_20_accuracy": 0.85,
+  "messy_20_wrong": [
+    {
+      "text": "my credit card got declined but i have money on it",
+      "category": "PAYMENT",
+      "pred": "REFUND"
+    },
+    {
+      "text": "can i change the size on my order before it ships",
+      "category": "ORDER",
+      "pred": "ACCOUNT"
+    },
+    {
+      "text": "is there a fee if i cancel my order after it shipped",
+      "category": "CANCEL",
+      "pred": "ORDER"
+    }
+  ]
+}
