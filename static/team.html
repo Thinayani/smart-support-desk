@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Support team</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<main class="wide">
+  <h1>Support team</h1>
+
+  <section id="login" class="card" style="max-width:420px">
+    <form id="loginForm">
+      <label for="u">Username</label><input id="u" autocomplete="username" required>
+      <label for="p">Password</label><input id="p" type="password" autocomplete="current-password" required>
+      <button type="submit">Log in</button>
+      <div id="loginOut" role="alert"></div>
+    </form>
+  </section>
+
+  <section id="app" class="hidden">
+    <div class="row">
+      <div><label for="cat">Category</label><select id="cat"><option value="">All categories</option></select></div>
+      <div><button id="logout" class="ghost" type="button">Log out</button></div>
+    </div>
+    <div id="listOut" role="alert"></div>
+    <table>
+      <thead><tr><th>#</th><th>Message</th><th>Category</th><th>Priority</th><th>Status</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+
+    <div id="detail" class="card hidden" style="margin-top:20px">
+      <div class="row"><h2 id="dTitle" style="margin:0;flex:3"></h2><button id="dClose" class="ghost" type="button">Close</button></div>
+      <p class="muted" id="dMeta"></p>
+      <div class="grid2">
+        <div>
+          <h3>Customer message</h3><pre class="draft" id="dMsg"></pre>
+          <label for="dStatus">Status</label><select id="dStatus"></select>
+          <div id="dOut" role="status"></div>
+        </div>
+        <div>
+          <h3>Suggested reply <span class="tag" id="dSource"></span></h3>
+          <pre class="draft" id="dDraft"></pre>
+          <div id="dFaq"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<script>
+// All customer-supplied text is written with textContent, never innerHTML.
+const $ = (id) => document.getElementById(id);
+let token = sessionStorage.getItem("token"), meta = null;
+
+async function api(path, opts = {}) {
+  const res = await fetch(path, { ...opts, headers: { "Content-Type": "application/json", Authorization: "Bearer " + token, ...(opts.headers || {}) } });
+  const body = await res.json().catch(() => ({}));
+  if (res.status === 401) { logout(); throw new Error("Please log in again."); }
+  if (!res.ok) throw new Error((body.error && body.error.message) || "Request failed.");
+  return body;
+}
+function logout() { token = null; sessionStorage.removeItem("token"); $("app").classList.add("hidden"); $("login").classList.remove("hidden"); }
+function cell(text, cls) { const td = document.createElement("td"); if (cls) { const s = document.createElement("span"); s.className = cls; s.textContent = text; td.append(s); } else td.textContent = text; return td; }
+
+async function loadList() {
+  $("listOut").textContent = "";
+  try {
+    const rows = await api("/api/tickets" + ($("cat").value ? "?category=" + encodeURIComponent($("cat").value) : ""));
+    const tbody = $("rows"); tbody.replaceChildren();
+    if (!rows.length) { const tr = document.createElement("tr"), td = cell("No tickets yet."); td.colSpan = 5; tr.append(td); tbody.append(tr); }
+    for (const t of rows) {
+      const tr = document.createElement("tr"); tr.className = "click"; tr.tabIndex = 0;
+      const msg = t.message.length > 80 ? t.message.slice(0, 80) + "…" : t.message;
+      tr.append(cell(t.id), cell(msg), cell(t.category, "tag"), cell(t.priority, "tag " + t.priority), cell(t.status.replace("_", " "), "tag"));
+      tr.addEventListener("click", () => openTicket(t.id));
+      tr.addEventListener("keydown", (e) => { if (e.key === "Enter") openTicket(t.id); });
+      tbody.append(tr);
+    }
+  } catch (e) { $("listOut").className = "msg err"; $("listOut").textContent = e.message; }
+}
+
+async function openTicket(id) {
+  const t = await api("/api/tickets/" + id);
+  $("detail").classList.remove("hidden");
+  $("dTitle").textContent = "Ticket #" + t.id;
+  $("dMeta").textContent = t.name + " <" + t.email + "> · " + t.category + " (model confidence " + Math.round(t.category_confidence * 100) + "%) · " + new Date(t.created_at).toLocaleString();
+  $("dMsg").textContent = t.message;
+  const sel = $("dStatus"); sel.replaceChildren();
+  for (const s of meta.statuses) { const o = document.createElement("option"); o.value = s; o.textContent = s.replace("_", " "); o.selected = s === t.status; sel.append(o); }
+  sel.onchange = async () => {
+    try { await api("/api/tickets/" + id, { method: "PATCH", body: JSON.stringify({ status: sel.value }) }); $("dOut").className = "msg ok"; $("dOut").textContent = "Status updated."; loadList(); }
+    catch (e) { $("dOut").className = "msg err"; $("dOut").textContent = e.message; }
+  };
+  $("dOut").className = ""; $("dOut").textContent = "";
+  $("dSource").textContent = t.draft_source || t.draft_status;
+  $("dDraft").textContent = t.draft_status === "pending" ? "Draft is still being written. Reopen in a moment." : (t.draft_text || "No draft available.");
+  const faq = $("dFaq"); faq.replaceChildren();
+  if (t.draft_status === "ready") {
+    const h = document.createElement("strong"); h.textContent = t.draft_faq_entries.length ? "FAQ entries used" : "No FAQ entry matched; nothing was invented."; faq.append(h);
+    for (const f of t.draft_faq_entries) { const d = document.createElement("div"); d.className = "faq"; const q = document.createElement("div"); q.textContent = f.id + ": " + f.question; d.append(q); faq.append(d); }
+  }
+}
+
+async function start() {
+  $("login").classList.add("hidden"); $("app").classList.remove("hidden");
+  meta = await api("/api/meta");
+  const cat = $("cat"); cat.length = 1;
+  for (const c of meta.categories) { const o = document.createElement("option"); o.value = c; o.textContent = c; cat.append(o); }
+  loadList();
+}
+$("loginForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  try {
+    const res = await fetch("/api/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ username: $("u").value, password: $("p").value }) });
+    const body = await res.json();
+    if (!res.ok) throw new Error((body.error && body.error.message) || "Login failed.");
+    token = body.token; sessionStorage.setItem("token", token); $("p").value = ""; $("loginOut").textContent = ""; start();
+  } catch (err) { $("loginOut").className = "msg err"; $("loginOut").textContent = err.message; }
+});
+$("cat").addEventListener("change", loadList);
+$("logout").addEventListener("click", logout);
+$("dClose").addEventListener("click", () => $("detail").classList.add("hidden"));
+if (token) start().catch(logout);
+</script>
+</body>
+</html>
