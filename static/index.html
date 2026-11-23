@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact support</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<main>
+  <h1>Contact support</h1>
+  <p class="sub">Tell us what you need and we will reply by email.</p>
+  <form id="form" class="card" novalidate>
+    <label for="name">Your name</label>
+    <input id="name" name="name" autocomplete="name" maxlength="100" required>
+    <label for="email">Email</label>
+    <input id="email" name="email" type="email" autocomplete="email" maxlength="254" required>
+    <label for="message">How can we help?</label>
+    <textarea id="message" name="message" maxlength="2000" required></textarea>
+    <button id="send" type="submit">Send message</button>
+    <div id="out" role="status" aria-live="polite"></div>
+  </form>
+  <p class="muted"><a href="/team">Team login</a></p>
+</main>
+<script>
+const form = document.getElementById("form"), out = document.getElementById("out"), btn = document.getElementById("send");
+function show(kind, text) { out.className = "msg " + kind; out.textContent = text; }
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  btn.disabled = true; out.className = ""; out.textContent = "";
+  try {
+    const res = await fetch("/api/tickets", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: form.name.value, email: form.email.value, message: form.message.value }),
+    });
+    const body = await res.json();
+    if (res.ok) { show("ok", "Thanks! We received your message (reference #" + body.id + ")."); form.reset(); }
+    else if (body.error && body.error.fields && body.error.fields.length)
+      show("err", body.error.fields.map(f => f.field + ": " + f.message).join(". "));
+    else show("err", (body.error && body.error.message) || "Something went wrong. Please try again.");
+  } catch { show("err", "Could not reach the server. Please try again."); }
+  finally { btn.disabled = false; }
+});
+</script>
+</body>
+</html>
