@@ -17,4 +17,3 @@
 2. Improve FAQ retrieval using embeddings and a reranker.
 3. Fix confusing ticket categories and create a larger, more realistic test dataset.
 4. Track whether agents send, edit or reject AI-generated replies.
-5. Improve security with proper authentication, password hashing and rate limiting, and move from SQLite to PostgreSQL.
